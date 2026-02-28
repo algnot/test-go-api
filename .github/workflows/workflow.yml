@@ -75,8 +75,8 @@ jobs:
             wc -c /tmp/app.yaml
             head -n 5 /tmp/app.yaml
                         
-            # microk8s kubectl apply -f /tmp/job.yaml
-            # microk8s kubectl -n test-go wait --for=condition=complete job/test-go-${{ github.sha }}-job --timeout=30m
+            microk8s kubectl apply -f /tmp/job.yaml
+            microk8s kubectl -n test-go wait --for=condition=complete job/test-go-${{ github.sha }}-job --timeout=30m
             
             microk8s kubectl apply -f /tmp/app.yaml
             microk8s kubectl rollout status deployment/test-go-api -n test-go --timeout=30m
