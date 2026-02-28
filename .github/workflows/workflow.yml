@@ -46,12 +46,14 @@ jobs:
           mkdir -p .rendered
           sed "s|__IMAGE_TAG__|${TAG}|g;" k8s/app.yaml > .rendered/app.yaml
           sed "s|__IMAGE_TAG__|${TAG}|g;" k8s/job.yaml > .rendered/job.yaml
+          sed "s|__IMAGE_TAG__|${TAG}|g;" k8s/service.yaml > .rendered/service.yaml
 
       - name: Encode manifests as base64
         run: |
           set -e
           echo "APP_YAML_B64=$(base64 -w0 .rendered/app.yaml)" >> $GITHUB_ENV
           echo "JOB_YAML_B64=$(base64 -w0 .rendered/job.yaml)" >> $GITHUB_ENV
+          echo "SERVICE_YAML_B64=$(base64 -w0 .rendered/service.yaml)" >> $GITHUB_ENV
 
       - name: Apply to microk8s
         uses: appleboy/ssh-action@master
@@ -61,21 +63,22 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           command_timeout: 30m
-          envs: APP_YAML_B64,JOB_YAML_B64
+          envs: APP_YAML_B64,JOB_YAML_B64,SERVICE_YAML_B64
           script: |
             set -e
             TAG=${{ github.sha }}
             
             echo "$APP_YAML_B64" | base64 -d > /tmp/app.yaml
             echo "$JOB_YAML_B64" | base64 -d > /tmp/job.yaml
+            echo "SERVICE_YAML_B64" | base64 -d > /tmp/service.yaml
             
             wc -c /tmp/app.yaml
             head -n 5 /tmp/app.yaml
-            
-            microk8s kubectl rollout status deployment/test-go-api -n test-go
-            
-            microk8s kubectl apply -f /tmp/job.yaml
-            microk8s kubectl -n test-go wait --for=condition=complete job/test-go-${{ github.sha }}-job --timeout=30m
+                        
+            # microk8s kubectl apply -f /tmp/job.yaml
+            # microk8s kubectl -n test-go wait --for=condition=complete job/test-go-${{ github.sha }}-job --timeout=30m
             
             microk8s kubectl apply -f /tmp/app.yaml
             microk8s kubectl rollout status deployment/test-go-api -n test-go --timeout=30m
+            
+            microk8s kubectl apply -f /tmp/service.yaml
