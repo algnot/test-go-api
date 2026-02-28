@@ -6,7 +6,7 @@ metadata:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: test-go-job
+  name: test-go-__IMAGE_TAG__-job
   namespace: test-go
 spec:
   backoffLimit: 1
