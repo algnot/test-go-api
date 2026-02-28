@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-go
+#---
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: test-go-api
+#  namespace: test-go
+#spec:
+#  selector:
+#    matchLabels:
+#      app: test-go-api
+#  template:
+#    metadata:
+#      labels:
+#        app: test-go-api
+#    spec:
+#      imagePullSecrets:
+#        - name: ghcr-pull
+#      containers:
+#        - name: app
+#          image: ghcr.io/algnot/test-go-api:__IMAGE_TAG__
