@@ -73,6 +73,6 @@ jobs:
             head -n 5 /tmp/app.yaml
             
             microk8s kubectl apply -f /tmp/job.yaml
-            microk8s kubectl -n test-go wait --for=condition=complete job/test-go-job --timeout=30m
+            microk8s kubectl -n test-go wait --for=condition=complete job/test-go-${{ github.sha }}-job --timeout=30m
             
             microk8s kubectl apply -f /tmp/app.yaml
