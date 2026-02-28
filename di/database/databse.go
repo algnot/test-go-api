@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"log"
 	"web-server-101/di/config"
 	"web-server-101/entity"
 
@@ -24,5 +25,6 @@ func InitDatabase() (*gorm.DB, error) {
 }
 
 func MigrateDatabase(db *gorm.DB) error {
+	log.Printf("Migrating database...")
 	return db.AutoMigrate(&entity.User{})
 }
