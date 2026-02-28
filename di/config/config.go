@@ -1,8 +1,6 @@
 package config
 
 import (
-	"log"
-
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
 )
@@ -27,11 +25,7 @@ type DatabaseConfig struct {
 
 func GetConfig() Config {
 	var config Config
-
-	err := godotenv.Load()
-	if err != nil {
-		log.Panicln("No .env file")
-	}
+	_ = godotenv.Load()
 
 	envconfig.MustProcess("app", &config.Server)
 	envconfig.MustProcess("database", &config.Database)
