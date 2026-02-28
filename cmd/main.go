@@ -25,5 +25,9 @@ func main() {
 			panic(err)
 		}
 		err = database.MigrateDatabase(db)
+		if err != nil {
+			log.Printf("MigrateDatabase error")
+			panic(err)
+		}
 	}
 }
