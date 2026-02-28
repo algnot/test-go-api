@@ -67,7 +67,7 @@ jobs:
             TAG=${{ github.sha }}
             
             echo "$APP_YAML_B64" | base64 -d > /tmp/app.yaml
-            echo "JOB_YAML_B64" | base64 -d > /tmp/job.yaml
+            echo "$JOB_YAML_B64" | base64 -d > /tmp/job.yaml
             
             wc -c /tmp/app.yaml
             head -n 5 /tmp/app.yaml
