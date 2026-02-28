@@ -9,6 +9,7 @@ metadata:
   name: test-go-api
   namespace: test-go
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: test-go-api
@@ -24,6 +25,9 @@ spec:
           image: ghcr.io/algnot/test-go-api:__IMAGE_TAG__
           ports:
             - containerPort: 3000
+          env:
+            - name: APP_SERVICE
+              value: "server"
           envFrom:
             - secretRef:
                 name: test-go-secret
